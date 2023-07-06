@@ -1,5 +1,5 @@
 """
-URL configuration for M5S1 project.
+URL configuration for ultima project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -16,10 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from base.views import *
+
+from base.views import inicio
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', inicio),
-    path('contato/', contato, name='contato')
+    path('', inicio, name='inicio'),
 ]
