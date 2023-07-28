@@ -1,5 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from base.forms import ContatoForm, ReservaForm
+
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+
 
 # View inicio, que é a primeira a ser acessada pelo usuário
 def inicio(request):
@@ -61,3 +65,37 @@ def reserva(request):
     }
 
     return render(request, 'reserva.html', contexto)
+
+
+# View de login de usuário
+def login_usuario(request):
+    if request.method == 'GET':
+        formulario = AuthenticationForm()
+        return render(request, 'login.html', {'formulario': formulario})
+    
+    else:
+        nome_usuario = request.POST['username']
+        senha = request.POST['password']
+        usuario = authenticate(request, username=nome_usuario, password=senha)
+        if usuario is not None:
+            login(request,usuario)
+            return redirect('inicio')
+
+
+# View de logout
+def logout_usuario(request):
+    logout(request)
+    return redirect('inicio')
+
+
+# View de cadastro de novo usuario
+def novo_usuario(request):
+    if request.method == 'GET':
+        formulario = UserCreationForm()
+        return render(request, 'novo_usuario.html', {'formulario': formulario})
+    
+    else:
+        formulario = UserCreationForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('inicio')
